@@ -1,53 +1,16 @@
-﻿using System;
 using System.Windows.Input;
 
+namespace SistemaReservas.MVVM;
 
-namespace SistemaReservas.MVVM
+public sealed class RelayCommand(Action<object?> execute, Predicate<object?>? canExecute = null) : ICommand
 {
+    public bool CanExecute(object? parameter) => canExecute?.Invoke(parameter) ?? true;
 
-    public class RelayCommand : ICommand
+    public void Execute(object? parameter)
     {
-
-
-        private readonly Action<object> ejecutar;
-
-
-
-        public RelayCommand(Action<object> ejecutar)
-        {
-
-            this.ejecutar = ejecutar;
-
-        }
-
-
-
-        public bool CanExecute(object parameter)
-        {
-            return true;
-        }
-
-
-
-        public void Execute(object parameter)
-        {
-
-            ejecutar(parameter);
-
-        }
-
-
-
-        public event EventHandler CanExecuteChanged
-        {
-
-            add { }
-
-            remove { }
-
-        }
-
-
+        if (CanExecute(parameter)) execute(parameter);
     }
 
+    public event EventHandler? CanExecuteChanged;
+    public void NotifyCanExecuteChanged() => CanExecuteChanged?.Invoke(this, EventArgs.Empty);
 }

@@ -1,152 +1,56 @@
-﻿using System.Collections.Generic;
 using System.Data;
 using Microsoft.Data.SqlClient;
 using SistemaReservas.Models;
 
+namespace SistemaReservas.Data;
 
-namespace SistemaReservas.Data
+public class ReservaRepository : IReservaRepository
 {
-    public class ReservaRepository
+    public Task<DataTable> ObtenerReservasDataTableAsync() => Task.Run(ObtenerReservasDataTable);
+    public Task<List<Reserva>> ObtenerReservasObjetosAsync() => Task.Run(ObtenerReservasObjetos);
+
+    // Escenario desconectado: nombres legibles para la agenda.
+    public DataTable ObtenerReservasDataTable()
     {
+        var table = new DataTable();
+        using var connection = new SqlConnection(Conexion.CadenaConexion);
+        const string sql = """
+            SELECT R.ReservaId, U.NombreCompleto AS Usuario, A.Nombre AS Aula,
+                   R.Fecha, R.Hora, R.Motivo
+            FROM Reservas R
+            INNER JOIN Usuarios U ON R.UsuarioId = U.UsuarioId
+            INNER JOIN Aulas A ON R.AulaId = A.AulaId
+            ORDER BY R.Fecha DESC, R.Hora DESC, R.ReservaId DESC
+            """;
+        using var adapter = new SqlDataAdapter(sql, connection);
+        adapter.Fill(table);
+        return table;
+    }
 
-
-        // ESCENARIO DESCONTECTADO
-        public DataTable ObtenerReservasDataTable()
+    // Escenario conectado.
+    public List<Reserva> ObtenerReservasObjetos()
+    {
+        var reservas = new List<Reserva>();
+        using var connection = new SqlConnection(Conexion.CadenaConexion);
+        connection.Open();
+        const string sql = """
+            SELECT ReservaId, AulaId, UsuarioId, Fecha, Hora, Motivo
+            FROM Reservas ORDER BY Fecha DESC, Hora DESC, ReservaId DESC
+            """;
+        using var command = new SqlCommand(sql, connection);
+        using var reader = command.ExecuteReader();
+        while (reader.Read())
         {
-
-            DataTable tabla =
-                new DataTable();
-
-
-            using (SqlConnection cn =
-                new SqlConnection(Conexion.CadenaConexion))
+            reservas.Add(new Reserva
             {
-
-
-                string sql = @"
-                    SELECT 
-                        R.ReservaId,
-                        U.NombreCompleto AS Usuario,
-                        A.Nombre AS Aula,
-                        R.Fecha,
-                        R.Hora,
-                        R.Motivo
-                    FROM Reservas R
-                    INNER JOIN Usuarios U
-                    ON R.UsuarioId = U.UsuarioId
-                    INNER JOIN Aulas A
-                    ON R.AulaId = A.AulaId";
-
-
-                SqlDataAdapter adapter =
-                    new SqlDataAdapter(sql, cn);
-
-
-                adapter.Fill(tabla);
-
-            }
-
-
-            return tabla;
-
+                ReservaId = Convert.ToInt32(reader["ReservaId"]),
+                AulaId = Convert.ToInt32(reader["AulaId"]),
+                UsuarioId = Convert.ToInt32(reader["UsuarioId"]),
+                Fecha = Convert.ToDateTime(reader["Fecha"]),
+                Hora = (TimeSpan)reader["Hora"],
+                Motivo = reader["Motivo"].ToString() ?? ""
+            });
         }
-
-
-
-
-
-        // ESCENARIO CONECTADO
-        public List<Reserva> ObtenerReservasObjetos()
-        {
-
-            List<Reserva> lista =
-                new List<Reserva>();
-
-
-
-            using (SqlConnection cn =
-                new SqlConnection(Conexion.CadenaConexion))
-            {
-
-                cn.Open();
-
-
-
-                string sql = @"
-                    SELECT 
-                        ReservaId,
-                        AulaId,
-                        UsuarioId,
-                        Fecha,
-                        Hora,
-                        Motivo
-                    FROM Reservas";
-
-
-
-                SqlCommand cmd =
-                    new SqlCommand(sql, cn);
-
-
-
-                SqlDataReader reader =
-                    cmd.ExecuteReader();
-
-
-
-                while (reader.Read())
-                {
-
-                    Reserva reserva =
-                        new Reserva();
-
-
-                    reserva.ReservaId =
-                        Convert.ToInt32(reader["ReservaId"]);
-
-
-
-                    reserva.AulaId =
-                        Convert.ToInt32(reader["AulaId"]);
-
-
-
-                    reserva.UsuarioId =
-                        Convert.ToInt32(reader["UsuarioId"]);
-
-
-
-                    reserva.Fecha =
-                        Convert.ToDateTime(reader["Fecha"]);
-
-
-
-                    reserva.Hora =
-                        (TimeSpan)reader["Hora"];
-
-
-
-                    reserva.Motivo =
-                        reader["Motivo"].ToString();
-
-
-
-                    lista.Add(reserva);
-
-                }
-
-
-
-                cn.Close();
-
-            }
-
-
-
-            return lista;
-
-        }
-
-
+        return reservas;
     }
 }

@@ -1,29 +1,20 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
+namespace SistemaReservas.MVVM;
 
-namespace SistemaReservas.MVVM
+public class ViewModelBase : INotifyPropertyChanged
 {
+    public event PropertyChangedEventHandler? PropertyChanged;
 
-    public class ViewModelBase : INotifyPropertyChanged
+    protected bool SetProperty<T>(ref T field, T value, [CallerMemberName] string? name = null)
     {
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-
-
-        protected void OnPropertyChanged(
-            [CallerMemberName] string nombre = null)
-        {
-
-            PropertyChanged?.Invoke(
-                this,
-                new PropertyChangedEventArgs(nombre));
-
-        }
-
-
+        if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+        field = value;
+        OnPropertyChanged(name);
+        return true;
     }
 
+    protected void OnPropertyChanged([CallerMemberName] string? name = null) =>
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 }

@@ -1,32 +1,27 @@
-﻿<Window x:Class="SistemaReservas.Views.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Sistema de Reservas"
-        Height="450"
-        Width="800">
-
-
-    <Grid>
-
-        <StackPanel VerticalAlignment="Center">
-
-
-            <TextBlock
-                Text="Sistema de Reservas"
-                FontSize="30"
-                HorizontalAlignment="Center"/>
-
-
-            <Button
-                Content="Ingresar"
-                Width="150"
-                Height="40"
-                Margin="20"
-                Command="{Binding AbrirLoginCommand}"/>
-
-
-        </StackPanel>
-
-    </Grid>
-
+<Window WindowStartupLocation="CenterScreen" Style="{StaticResource {x:Type Window}}" x:Class="SistemaReservas.Views.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Title="Reserva · Gestión de espacios" Width="1040" Height="680" MinWidth="880" MinHeight="590">
+ <Grid>
+  <Grid.ColumnDefinitions><ColumnDefinition Width="1.1*" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+  <Border Background="#142E3C" Padding="48">
+   <Grid>
+    <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="*" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+    <TextBlock Text="R / RESERVA" Foreground="White" FontWeight="SemiBold" FontSize="23" />
+    <StackPanel Grid.Row="1" VerticalAlignment="Center">
+     <TextBlock Text="ESPACIOS QUE CONECTAN" Foreground="#6CDBC4" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,22" />
+     <TextBlock Text="Todo empieza&#xA;con un espacio." Foreground="White" FontSize="42" FontWeight="SemiBold" LineHeight="51" />
+     <TextBlock Text="Consulta aulas y organiza tus reservas en un solo lugar." Foreground="#BDCED8" FontSize="16" TextWrapping="Wrap" LineHeight="26" Margin="0,24,0,30" />
+     <Border BorderBrush="#36505F" BorderThickness="1" CornerRadius="12" Padding="24">
+      <StackPanel><TextBlock Text="Una gestión más sencilla" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,12" /><TextBlock Text="01   Encuentra tu aula&#xA;02   Consulta la programación&#xA;03   Planifica tu próxima actividad" Foreground="#BDCED8" LineHeight="30" /></StackPanel>
+     </Border>
+    </StackPanel>
+    <TextBlock Grid.Row="2" Text="GESTIÓN ACADÉMICA / SISTEMA DE RESERVAS" Foreground="#8FA8B7" FontSize="10" />
+   </Grid>
+  </Border>
+  <StackPanel Grid.Column="1" Margin="48" VerticalAlignment="Center">
+   <TextBlock Text="BIENVENIDO" Style="{StaticResource Eyebrow}" />
+   <TextBlock Text="Tu próximo espacio,&#xA;a un paso." FontSize="32" FontWeight="SemiBold" Margin="0,0,0,18" />
+   <TextBlock Text="Accede con tu cuenta para consultar las aulas y la agenda de reservas." Style="{StaticResource Subtitle}" Margin="0,0,0,30" />
+   <Button Content="Ingresar al sistema    →" Command="{Binding AbrirLoginCommand}" HorizontalAlignment="Stretch" />
+   <Border BorderBrush="{StaticResource Line}" BorderThickness="0,1,0,0" Margin="0,32,0,0" Padding="0,20,0,0"><TextBlock Text="Usa las credenciales proporcionadas por el administrador de tu institución." Style="{StaticResource Subtitle}" FontSize="12" /></Border>
+  </StackPanel>
+ </Grid>
 </Window>

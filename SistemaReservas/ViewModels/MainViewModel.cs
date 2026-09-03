@@ -1,40 +1,12 @@
-﻿using System.Windows.Input;
 using SistemaReservas.MVVM;
-using SistemaReservas.Views;
+using SistemaReservas.Services;
 
+namespace SistemaReservas.ViewModels;
 
-namespace SistemaReservas.ViewModels
+public sealed class MainViewModel : ViewModelBase
 {
+    public RelayCommand AbrirLoginCommand { get; }
 
-    public class MainViewModel : ViewModelBase
-    {
-
-
-        public ICommand AbrirLoginCommand { get; }
-
-
-
-        public MainViewModel()
-        {
-
-            AbrirLoginCommand =
-                new RelayCommand(AbrirLogin);
-
-        }
-
-
-
-        private void AbrirLogin(object obj)
-        {
-
-            LoginView ventana =
-                new LoginView();
-
-            ventana.Show();
-
-        }
-
-
-    }
-
+    public MainViewModel(IWindowService windows) =>
+        AbrirLoginCommand = new RelayCommand(_ => windows.MostrarLogin());
 }

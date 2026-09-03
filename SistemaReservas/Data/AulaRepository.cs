@@ -1,108 +1,43 @@
-﻿using System.Collections.Generic;
+using System.Data;
 using Microsoft.Data.SqlClient;
 using SistemaReservas.Models;
 
+namespace SistemaReservas.Data;
 
-namespace SistemaReservas.Data
+public class AulaRepository : IAulaRepository
 {
-    public class AulaRepository
+    public Task<DataTable> ObtenerAulasDataTableAsync() => Task.Run(ObtenerAulasDataTable);
+    public Task<List<Aula>> ObtenerAulasObjetosAsync() => Task.Run(ObtenerAulasObjetos);
+
+    private const string SelectAulas = "SELECT AulaId, Nombre, Capacidad FROM Aulas ORDER BY Nombre";
+
+    // Escenario desconectado.
+    public DataTable ObtenerAulasDataTable()
     {
+        var table = new DataTable();
+        using var connection = new SqlConnection(Conexion.CadenaConexion);
+        using var adapter = new SqlDataAdapter(SelectAulas, connection);
+        adapter.Fill(table);
+        return table;
+    }
 
-
-        // ESCENARIO DESCONTECTADO
-        public System.Data.DataTable ObtenerAulasDataTable()
+    // Escenario conectado.
+    public List<Aula> ObtenerAulasObjetos()
+    {
+        var aulas = new List<Aula>();
+        using var connection = new SqlConnection(Conexion.CadenaConexion);
+        connection.Open();
+        using var command = new SqlCommand(SelectAulas, connection);
+        using var reader = command.ExecuteReader();
+        while (reader.Read())
         {
-
-            System.Data.DataTable tabla =
-                new System.Data.DataTable();
-
-
-            using (SqlConnection cn =
-                new SqlConnection(Conexion.CadenaConexion))
+            aulas.Add(new Aula
             {
-
-                string sql =
-                    "SELECT AulaId, Nombre, Capacidad FROM Aulas";
-
-
-                SqlDataAdapter adapter =
-                    new SqlDataAdapter(sql, cn);
-
-
-                adapter.Fill(tabla);
-
-            }
-
-
-            return tabla;
-
+                AulaId = Convert.ToInt32(reader["AulaId"]),
+                Nombre = reader["Nombre"].ToString() ?? "",
+                Capacidad = Convert.ToInt32(reader["Capacidad"])
+            });
         }
-
-
-
-        // ESCENARIO CONECTADO
-        public List<Aula> ObtenerAulasObjetos()
-        {
-
-            List<Aula> lista =
-                new List<Aula>();
-
-
-            using (SqlConnection cn =
-                new SqlConnection(Conexion.CadenaConexion))
-            {
-
-                cn.Open();
-
-
-                string sql =
-                    "SELECT AulaId, Nombre, Capacidad FROM Aulas";
-
-
-                SqlCommand cmd =
-                    new SqlCommand(sql, cn);
-
-
-
-                SqlDataReader reader =
-                    cmd.ExecuteReader();
-
-
-
-                while (reader.Read())
-                {
-
-                    Aula aula =
-                        new Aula();
-
-
-                    aula.AulaId =
-                        Convert.ToInt32(reader["AulaId"]);
-
-
-                    aula.Nombre =
-                        reader["Nombre"].ToString();
-
-
-                    aula.Capacidad =
-                        Convert.ToInt32(reader["Capacidad"]);
-
-
-
-                    lista.Add(aula);
-
-                }
-
-
-                cn.Close();
-
-            }
-
-
-            return lista;
-
-        }
-
-
+        return aulas;
     }
 }

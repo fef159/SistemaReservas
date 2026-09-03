@@ -1,68 +1,33 @@
-﻿using Microsoft.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using SistemaReservas.Models;
 
-namespace SistemaReservas.Data
+namespace SistemaReservas.Data;
+
+public class UsuarioRepository : IUsuarioRepository
 {
-    public class UsuarioRepository
+    public Task<Usuario?> ValidarUsuarioAsync(string username, string password) =>
+        Task.Run(() => ValidarUsuario(username, password));
+
+    public Usuario? ValidarUsuario(string username, string password)
     {
-
-        public Usuario ValidarUsuario(string username, string password)
+        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrEmpty(password)) return null;
+        using var connection = new SqlConnection(Conexion.CadenaConexion);
+        connection.Open();
+        // Conserva el esquema de autenticación de la base de datos existente.
+        const string sql = """
+            SELECT UsuarioId, Username, NombreCompleto
+            FROM Usuarios WHERE Username = @username AND Password = @password
+            """;
+        using var command = new SqlCommand(sql, connection);
+        command.Parameters.AddWithValue("@username", username.Trim());
+        command.Parameters.AddWithValue("@password", password);
+        using var reader = command.ExecuteReader();
+        if (!reader.Read()) return null;
+        return new Usuario
         {
-            Usuario usuario = null;
-
-
-            using (SqlConnection cn =
-                new SqlConnection(Conexion.CadenaConexion))
-            {
-
-                cn.Open();
-
-
-                string sql = @"SELECT *
-                               FROM Usuarios
-                               WHERE Username=@username
-                               AND Password=@password";
-
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-
-
-                cmd.Parameters.AddWithValue("@username", username);
-                cmd.Parameters.AddWithValue("@password", password);
-
-
-
-                SqlDataReader dr = cmd.ExecuteReader();
-
-
-
-                if (dr.Read())
-                {
-
-                    usuario = new Usuario()
-                    {
-
-                        UsuarioId = Convert.ToInt32(dr["UsuarioId"]),
-
-                        Username = dr["Username"].ToString(),
-
-                        Password = dr["Password"].ToString(),
-
-                        NombreCompleto = dr["NombreCompleto"].ToString()
-
-                    };
-
-                }
-
-
-                cn.Close();
-
-            }
-
-
-            return usuario;
-
-        }
-
+            UsuarioId = Convert.ToInt32(reader["UsuarioId"]),
+            Username = reader["Username"].ToString() ?? "",
+            NombreCompleto = reader["NombreCompleto"].ToString() ?? ""
+        };
     }
 }

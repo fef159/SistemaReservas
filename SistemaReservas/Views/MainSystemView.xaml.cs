@@ -1,16 +1,8 @@
-﻿using System.Windows;
+using System.Windows;
 
+namespace SistemaReservas.Views;
 
-namespace SistemaReservas.Views
+public partial class MainSystemView : Window
 {
-    public partial class MainSystemView : Window
-    {
-
-        public MainSystemView()
-        {
-            InitializeComponent();
-        }
-
-
-    }
+    public MainSystemView() => InitializeComponent();
 }

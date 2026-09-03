@@ -1,23 +1,8 @@
-﻿using System.Windows;
-using SistemaReservas.ViewModels;
+using System.Windows.Controls;
 
+namespace SistemaReservas.Views;
 
-namespace SistemaReservas.Views
+public partial class AulasDataTableView : UserControl
 {
-    public partial class AulasDataTableView : Window
-    {
-
-
-        public AulasDataTableView()
-        {
-            InitializeComponent();
-
-
-            DataContext =
-                new AulaViewModel();
-
-        }
-
-
-    }
+    public AulasDataTableView() => InitializeComponent();
 }

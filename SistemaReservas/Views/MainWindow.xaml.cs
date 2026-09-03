@@ -1,19 +1,8 @@
-﻿using System.Windows;
-using SistemaReservas.ViewModels;
+using System.Windows;
 
+namespace SistemaReservas.Views;
 
-namespace SistemaReservas.Views
+public partial class MainWindow : Window
 {
-    public partial class MainWindow : Window
-    {
-
-        public MainWindow()
-        {
-            InitializeComponent();
-
-            DataContext = new MainViewModel();
-
-        }
-
-    }
+    public MainWindow() => InitializeComponent();
 }

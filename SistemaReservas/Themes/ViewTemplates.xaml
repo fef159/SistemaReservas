@@ -1,0 +1,9 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:vm="clr-namespace:SistemaReservas.ViewModels"
+                    xmlns:views="clr-namespace:SistemaReservas.Views">
+    <DataTemplate DataType="{x:Type vm:InicioViewModel}"><views:InicioView/></DataTemplate>
+    <DataTemplate DataType="{x:Type vm:AulaViewModel}"><views:AulasView/></DataTemplate>
+    <DataTemplate DataType="{x:Type vm:ReservaViewModel}"><views:ReservasView/></DataTemplate>
+    <DataTemplate DataType="{x:Type vm:NuevaReservaViewModel}"><views:NuevaReservaView/></DataTemplate>
+</ResourceDictionary>

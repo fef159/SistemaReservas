@@ -1,47 +1,16 @@
-<Window x:Class="SistemaReservas.Views.LoginView"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Login"
-        Height="350"
-        Width="400">
-
-
-    <Grid>
-
-        <StackPanel
-            VerticalAlignment="Center"
-            Margin="40">
-
-
-            <TextBlock
-                Text="Usuario"/>
-
-
-            <TextBox
-                x:Name="txtUsuario"
-                Height="30"/>
-
-
-            <TextBlock
-                Text="Contraseña"
-                Margin="0,15,0,0"/>
-
-
-            <PasswordBox
-                x:Name="txtPassword"
-                Height="30"/>
-
-
-            <Button
-                Content="Ingresar"
-                Height="35"
-                Margin="0,20,0,0"
-                Click="Ingresar_Click"/>
-
-
-        </StackPanel>
-
-    </Grid>
-
-
+<Window Style="{StaticResource {x:Type Window}}" x:Class="SistemaReservas.Views.LoginView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Title="Reserva · Iniciar sesión" Width="490" Height="690" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" xmlns:b="clr-namespace:SistemaReservas.Behaviors" FocusManager.FocusedElement="{Binding ElementName=txtUsuario}">
+ <Border Style="{StaticResource Card}" Margin="24" Padding="28">
+  <StackPanel VerticalAlignment="Center">
+   <TextBlock Text="R / RESERVA" Foreground="{StaticResource Accent}" FontWeight="Bold" FontSize="20" Margin="0,0,0,32" />
+   <TextBlock Text="Inicia sesión" Style="{StaticResource PageTitle}" />
+   <TextBlock Text="Bienvenido de nuevo. Ingresa tus credenciales para continuar." Style="{StaticResource Subtitle}" Margin="0,0,0,26" />
+   <Label Target="{Binding ElementName=txtUsuario}" Content="_Usuario" Padding="0,0,0,8" FontWeight="SemiBold" />
+   <TextBox x:Name="txtUsuario" AutomationProperties.Name="Usuario" MaxLength="100" Text="{Binding Usuario, UpdateSourceTrigger=PropertyChanged}" />
+   <Label Target="{Binding ElementName=txtPassword}" Content="_Contraseña" Padding="0,18,0,8" FontWeight="SemiBold" />
+   <PasswordBox x:Name="txtPassword" AutomationProperties.Name="Contraseña" MaxLength="256" b:PasswordBinding.Enabled="True" b:PasswordBinding.Value="{Binding Contrasena, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+   <TextBlock x:Name="ErrorText" Foreground="#B33A3A" TextWrapping="Wrap" MinHeight="42" Margin="0,12,0,4" AutomationProperties.LiveSetting="Polite" Text="{Binding Error}" />
+   <Button x:Name="IngresarButton" Content="{Binding TextoIngreso}" IsDefault="True" Command="{Binding IngresarCommand}" />
+   <TextBlock Text="¿Necesitas acceso? Contacta al administrador." Style="{StaticResource Subtitle}" FontSize="12" Margin="0,22,0,0" TextAlignment="Center" />
+  </StackPanel>
+ </Border>
 </Window>
