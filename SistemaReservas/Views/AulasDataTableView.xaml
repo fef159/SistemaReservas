@@ -1,0 +1,20 @@
+<Window x:Class="SistemaReservas.Views.AulasDataTableView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Aulas - DataTable"
+        Height="400"
+        Width="600">
+
+
+    <Grid Margin="20">
+
+        <DataGrid
+            ItemsSource="{Binding Aulas}"
+            AutoGenerateColumns="True"
+            IsReadOnly="True"/>
+
+
+    </Grid>
+
+
+</Window>

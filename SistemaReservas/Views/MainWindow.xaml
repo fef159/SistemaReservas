@@ -1,0 +1,32 @@
+﻿<Window x:Class="SistemaReservas.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Sistema de Reservas"
+        Height="450"
+        Width="800">
+
+
+    <Grid>
+
+        <StackPanel VerticalAlignment="Center">
+
+
+            <TextBlock
+                Text="Sistema de Reservas"
+                FontSize="30"
+                HorizontalAlignment="Center"/>
+
+
+            <Button
+                Content="Ingresar"
+                Width="150"
+                Height="40"
+                Margin="20"
+                Command="{Binding AbrirLoginCommand}"/>
+
+
+        </StackPanel>
+
+    </Grid>
+
+</Window>
